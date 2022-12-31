@@ -42,6 +42,7 @@ label {
   height: 100vh;
   background-color: #d3d3d3;
   flex-wrap: wrap;
+  align-content: flex-start;
   display: flex;
 }
 

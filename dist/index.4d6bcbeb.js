@@ -532,7 +532,7 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"gLLPy":[function(require,module,exports) {
-var _domUpdates = require("./domUpdates");
+// import { htmlizeIdeas, clearInputs, displayIdeas } from "./domUpdates";
 var _ideaJs = require("./Idea.js");
 const { deleteIdea  } = require("e7e601f5d56e05e0");
 let ideas = [
@@ -552,111 +552,84 @@ let ideas = [
         description: "For reading in a pool/ocean/bathtub"
     }
 ];
+const updateIdeasArray = (updatedIdeas)=>{
+    ideas = updatedIdeas;
+    return ideas;
+};
 window.onload = function() {
     //should i handle this with a pipeline?
-    (0, _domUpdates.displayIdeas)((0, _ideaJs.addFavoriteStatus)(ideas));
+    displayIdeas(updateIdeasArray((0, _ideaJs.addFavoriteStatus)(ideas)));
 };
-// //should this be deconstructed into individual functions that create each piece of this object?
-// const createIdea = (title, description) => {
-//   event.preventDefault() 
-//   return {
-//     id: Date.now(),
-//     title: title,
-//     description: description,
-//     isFavorite: false
-//   }
-// }
-// const addFavoriteStatus = (ideas) => {
-//   const favAddedIdeas = ideas.map(idea => {
-//     if (!idea.isFavorite) {
-//       const updatedIdea = {...idea, isFavorite: false}
-//       return updatedIdea
-//     }
-//   })
-//   ideas = favAddedIdeas
-//   return ideas
-// }
-// const addIdea = (idea, oldIdeas) => {
-//   const newIdeas = [ ...oldIdeas, idea ]
-//   ideas = newIdeas
-//   return ideas
-// }
 const handleCardClick = (event)=>{
-    const clickedCardId = parseInt(event.target.closest("section").id);
+    const { target , selected , firstIdeas , endIdeas  } = defineSelection(event);
+    if (target.classList.contains("favorite-button")) displayIdeas(updateIdeasArray((0, _ideaJs.toggleFavoriteStatus)(selected, firstIdeas, endIdeas)));
+    else if (target.classList.contains("delete-x")) displayIdeas(updateIdeasArray((0, _ideaJs.deleteIdea)(firstIdeas, endIdeas)));
+};
+const defineSelection = (event)=>{
+    const target = event.target;
+    const clickedCardId = parseInt(target.closest("section").id);
     const index = ideas.findIndex((element)=>element.id === clickedCardId);
     const selected = ideas.slice(index, index + 1)[0];
     const firstIdeas = ideas.slice(0, index);
     const endIdeas = ideas.slice(index + 1);
-    if (event.target.classList.contains("favorite-button")) {
-        (0, _ideaJs.toggleFavoriteStatus)(selected, firstIdeas, endIdeas);
-        (0, _domUpdates.displayIdeas)(ideas);
-    } else if (event.target.classList.contains("delete-x")) {
-        (0, _ideaJs.deleteIdea)(firstIdeas, endIdeas);
-        (0, _domUpdates.displayIdeas)(ideas);
-    }
-} // const deleteIdea = (firstIdeas, endIdeas) => {
- //   ideas = [...firstIdeas, ...endIdeas]
- //   return ideas
- // }
- // const toggleFavoriteStatus = (selected, firstIdeas, endIdeas) => {
- //   selected.isFavorite = !selected.isFavorite
- //   ideas = [...firstIdeas, selected, ...endIdeas]
- //   return ideas
- // }
- //DOM UPDATES - need to figure out import syntax for parcel
- // const ideasContainer = document.querySelector('#ideas-container');
- // const submitIdeaButton = document.querySelector("#save-button");
- // const userInputTitle = document.querySelector("#title-input");
- // const userInputDescription = document.querySelector("#description-input");
- // submitIdeaButton.addEventListener('click', function (event) {
- //   //should i handle this with a pipeline?
- //   displayIdeas(  
- //     addIdea( 
- //       createIdea(userInputTitle.value, userInputDescription.value ), ideas)
- //       )
- // })
- // ideasContainer.addEventListener('click', function(event){
- //   handleCardClick(event)
- //   //function to toggle favorite
- // })
- // const displayIdeas = (ideas) => {
- //   ideasContainer.innerHTML = htmlizeIdeas(ideas)
- //   clearInputs([userInputTitle, userInputDescription])
- // }
- // //recursion
- // const htmlizeIdeas = (ideas) => {
- //   if (!ideas.length) {
- //     return
- //   }
- //   const firstIdea = findHead(ideas)
- //   const favoriteIcon = firstIdea.isFavorite ? "❤️" : "";
- //   const favButtonText = firstIdea.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'
- //   const htmlIdea = `
- //     <section class="idea-card" id="${firstIdea.id}">
- //       <div class="card-header"><span>${favoriteIcon}</span><p class="delete-x">X</p></div>
- //       <article>
- //         <h2 class="card-title">${firstIdea.title}</h2>
- //         <p class="card-text">${firstIdea.description}</p>
- //       </article>
- //       <button class="favorite-button">${favButtonText}</button>
- //     </section>`
- //   return [htmlIdea].concat([htmlizeIdeas(findTail(ideas))])
- // }
- // //recursion
- // const clearInputs = (inputs) => {
- //   if (!inputs.length) {
- //     return
- //   }
- //   findHead(inputs).value = ''
- //   return clearInputs(findTail(inputs))
- // }
- // const findHead = (array) => {
- //   return array[0]
- // }
- // const findTail = (array) => {
- //   return array.slice(1)
- // }
- // //FUNCTIONAL NOTES
+    const selectionData = {
+        selected,
+        firstIdeas,
+        endIdeas,
+        target
+    };
+    return selectionData;
+};
+//DOM UPDATES - need to figure out import syntax for parcel
+const ideasContainer = document.querySelector("#ideas-container");
+const submitIdeaButton = document.querySelector("#save-button");
+const userInputTitle = document.querySelector("#title-input");
+const userInputDescription = document.querySelector("#description-input");
+submitIdeaButton.addEventListener("click", function(event) {
+    //should i handle this with a pipeline?
+    event.preventDefault();
+    displayIdeas(updateIdeasArray((0, _ideaJs.addIdea)((0, _ideaJs.createIdea)(userInputTitle.value, userInputDescription.value), ideas)));
+});
+ideasContainer.addEventListener("click", function(event) {
+    handleCardClick(event);
+});
+const displayIdeas = (ideas)=>{
+    ideasContainer.innerHTML = htmlizeIdeas(ideas).join("");
+    clearInputs([
+        userInputTitle,
+        userInputDescription
+    ]);
+};
+//recursion
+const htmlizeIdeas = (ideas)=>{
+    if (!ideas.length) return;
+    const firstIdea = findHead(ideas);
+    const favoriteIcon = firstIdea.isFavorite ? "❤️" : "";
+    const favButtonText = firstIdea.isFavorite ? "Remove from Favorites" : "Add to Favorites";
+    const htmlIdea = `<section class="idea-card" id="${firstIdea.id}">
+      <div class="card-header"><span>${favoriteIcon}</span><p class="delete-x">X</p></div>
+      <article>
+        <h2 class="card-title">${firstIdea.title}</h2>
+        <p class="card-text">${firstIdea.description}</p>
+      </article>
+      <button class="favorite-button">${favButtonText}</button>
+    </section>`;
+    return [
+        htmlIdea
+    ].concat(htmlizeIdeas(findTail(ideas)));
+};
+//recursion
+const clearInputs = (inputs)=>{
+    if (!inputs.length) return;
+    findHead(inputs).value = "";
+    return clearInputs(findTail(inputs));
+};
+const findHead = (array)=>{
+    return array[0];
+};
+const findTail = (array)=>{
+    return array.slice(1);
+} // //FUNCTIONAL NOTES
  // - could i use recursion?
  // - ideas as a global variable is impure
  // - can i fetch from api?
@@ -670,55 +643,55 @@ const handleCardClick = (event)=>{
  // - pull in from api?
  // filter by favorites
  // no global variable
+ // Blockers
+ // - When I try to break the ideas-updating functions into a different file, it introduces a bug because those functions are trying to update the global ideas array but dont have access to it anymore
+ //i tried moving that global array into the ideas file and importing it here but it still didnt work
+ // instead of reassigning the ideas array within the functions in Idea.js, i create the updateIdeasArray function that takes in the new array and reassigns it as the value of the global variable in this file.  I think that is working so far.  So everytime I invoke one of those functions, I have to wrap that invokation in the invocation of updateIdeasArray too
 ;
 
-},{"./Idea.js":"1Vwqe","e7e601f5d56e05e0":"1Vwqe","./domUpdates":"lf4zv"}],"1Vwqe":[function(require,module,exports) {
+},{"./Idea.js":"1Vwqe","e7e601f5d56e05e0":"1Vwqe"}],"1Vwqe":[function(require,module,exports) {
 //should this be deconstructed into individual functions that create each piece of this object?
-const createIdea = (title, description)=>{
-    event.preventDefault();
+const createIdea = (title, description, id)=>{
+    // event.preventDefault() 
     return {
-        id: Date.now(),
+        id: id ? id : Date.now(),
         title: title,
         description: description,
         isFavorite: false
     };
 };
-const addFavoriteStatus = (ideas1)=>{
-    const favAddedIdeas = ideas1.map((idea)=>{
+const addFavoriteStatus = (ideas)=>{
+    const favAddedIdeas = ideas.map((idea)=>{
         if (!idea.isFavorite) {
             const updatedIdea = {
                 ...idea,
                 isFavorite: false
             };
             return updatedIdea;
-        }
+        } else //caught that i needed this else when testing because I was getting undefined if the isFavorite key already existed - weird that this didnt cause errors on the UI??
+        return idea;
     });
-    ideas1 = favAddedIdeas;
-    return ideas1;
+    return favAddedIdeas;
 };
 const addIdea = (idea, oldIdeas)=>{
-    const newIdeas = [
+    return [
         ...oldIdeas,
         idea
     ];
-    ideas = newIdeas;
-    return ideas;
 };
 const deleteIdea = (firstIdeas, endIdeas)=>{
-    ideas = [
+    return [
         ...firstIdeas,
         ...endIdeas
     ];
-    return ideas;
 };
 const toggleFavoriteStatus = (selected, firstIdeas, endIdeas)=>{
     selected.isFavorite = !selected.isFavorite;
-    ideas = [
+    return [
         ...firstIdeas,
         selected,
         ...endIdeas
     ];
-    return ideas;
 };
 module.exports = {
     createIdea,
@@ -726,66 +699,6 @@ module.exports = {
     addIdea,
     deleteIdea,
     toggleFavoriteStatus
-};
-
-},{}],"lf4zv":[function(require,module,exports) {
-const ideasContainer = document.querySelector("#ideas-container");
-const submitIdeaButton = document.querySelector("#save-button");
-const userInputTitle = document.querySelector("#title-input");
-const userInputDescription = document.querySelector("#description-input");
-submitIdeaButton.addEventListener("click", function(event) {
-    //should i handle this with a pipeline?
-    displayIdeas(addIdea(createIdea(userInputTitle.value, userInputDescription.value), ideas));
-});
-ideasContainer.addEventListener("click", function(event) {
-    handleCardClick(event);
-//function to toggle favorite
-});
-//recursion
-const htmlizeIdeas = (ideas1)=>{
-    if (!ideas1.length) return;
-    const firstIdea = findHead(ideas1);
-    const favoriteIcon = firstIdea.isFavorite ? "❤️" : "";
-    const favButtonText = firstIdea.isFavorite ? "Remove from Favorites" : "Add to Favorites";
-    const htmlIdea = `
-    <section class="idea-card" id="${firstIdea.id}">
-      <div class="card-header"><span>${favoriteIcon}</span><p class="delete-x">X</p></div>
-      <article>
-        <h2 class="card-title">${firstIdea.title}</h2>
-        <p class="card-text">${firstIdea.description}</p>
-      </article>
-      <button class="favorite-button">${favButtonText}</button>
-    </section>`;
-    return [
-        htmlIdea
-    ].concat([
-        htmlizeIdeas(findTail(ideas1))
-    ]);
-};
-//recursion
-const clearInputs = (inputs)=>{
-    if (!inputs.length) return;
-    findHead(inputs).value = "";
-    return clearInputs(findTail(inputs));
-};
-const displayIdeas = (ideas1)=>{
-    ideasContainer.innerHTML = htmlizeIdeas(ideas1);
-    clearInputs([
-        userInputTitle,
-        userInputDescription
-    ]);
-};
-//helper functions
-const findHead = (array)=>{
-    return array[0];
-};
-const findTail = (array)=>{
-    return array.slice(1);
-};
-module.exports = {
-    htmlizeIdeas,
-    clearInputs,
-    displayIdeas
 };
 
 },{}]},["8TtF2","gLLPy"], "gLLPy", "parcelRequire716c")
