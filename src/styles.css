@@ -1,0 +1,95 @@
+body {
+  display: flex;
+  margin: none;
+  padding: none;
+  border: none;
+  
+}
+
+.sidebar{
+  width: 30%;
+  height: 100vh;
+  background-color: lightblue;
+}
+
+main {
+  width: 100%;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  margin: 5px auto;
+}
+
+input, 
+button,
+label {
+  width: 40%;
+  margin: 0px auto 20px auto;
+}
+
+#search-icon-button {
+  width: 5%;
+  height: 25px;
+}
+
+label {
+  margin: 0px auto;
+}
+
+#ideas-container {
+  background-color: lightgray;
+  height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.idea-card {
+  margin: 5px;
+  width: 20%;
+  border: 1px solid purple;
+  height: fit-content;
+  background-color: white;
+  padding: 5px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 5px;
+}
+
+span {
+  margin: 16px 0 ; 
+}
+
+.favorite-button {
+  /* margin: 10px auto; */
+  width: 100%;
+}
+
+article {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-title, 
+.card-text {
+  margin: 5% auto;
+}
+
+.delete-x {
+  cursor: pointer;
+  border: 1px solid black;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.blue-text {
+  color: lightblue;
+}

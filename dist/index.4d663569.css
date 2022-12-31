@@ -1,0 +1,93 @@
+body {
+  margin: none;
+  padding: none;
+  border: none;
+  display: flex;
+}
+
+.sidebar {
+  width: 30%;
+  height: 100vh;
+  background-color: #add8e6;
+}
+
+main {
+  width: 100%;
+}
+
+form {
+  flex-direction: column;
+  display: flex;
+}
+
+h1 {
+  margin: 5px auto;
+}
+
+input, button, label {
+  width: 40%;
+  margin: 0 auto 20px;
+}
+
+#search-icon-button {
+  width: 5%;
+  height: 25px;
+}
+
+label {
+  margin: 0 auto;
+}
+
+#ideas-container {
+  height: 100vh;
+  background-color: #d3d3d3;
+  flex-wrap: wrap;
+  display: flex;
+}
+
+.idea-card {
+  width: 20%;
+  height: -moz-fit-content;
+  height: fit-content;
+  background-color: #fff;
+  border: 1px solid purple;
+  margin: 5px;
+  padding: 5px;
+}
+
+.card-header {
+  justify-content: space-between;
+  padding: 0 5px;
+  display: flex;
+}
+
+span {
+  margin: 16px 0;
+}
+
+.favorite-button {
+  width: 100%;
+}
+
+article {
+  flex-direction: column;
+  justify-content: center;
+  display: flex;
+}
+
+.card-title, .card-text {
+  margin: 5% auto;
+}
+
+.delete-x {
+  cursor: pointer;
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.blue-text {
+  color: #add8e6;
+}
+
+/*# sourceMappingURL=index.4d663569.css.map */

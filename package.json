@@ -1,0 +1,16 @@
+{
+  "name": "my-project",
+  "source": "src/index.html",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build",
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "parcel": "^2.8.2"
+  },
+  "dependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0"
+  }
+}
