@@ -8,6 +8,8 @@ import {  createIdea,
 
 const { deleteIdea } = require("./Idea");
 
+//CLOSURE - Is a closure the solution to the this state and global variable?
+//can i save that returned function in a variable then call it and it will be able to access the data from that original function even though its being called outside of it?? (from notes)
 let ideas = [
   { id: 1, title: 'Bluetooth rotary phone', description: 'Because it\'s cool as heck and who wants a landline these days' },
   { id: 2, title: 'Bring back bowing', description: 'No more shaking hands! Let\'s all bow and curtsy instead' },
